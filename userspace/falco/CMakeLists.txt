@@ -91,6 +91,11 @@ if(USE_BUNDLED_DEPS)
   add_dependencies(falco yamlcpp)
 endif()
 
+if(DEFINED LIBHAWK_LIBRARIES)
+  message(STATUS "Using externally provided libhawk implementations: ${LIBHAWK_LIBRARIES}")
+  target_link_libraries(falco ${LIBHAWK_LIBRARIES})
+endif()
+
 if(MINIMAL_BUILD)
   target_include_directories(
     falco
@@ -102,7 +107,8 @@ if(MINIMAL_BUILD)
       "${STRING_VIEW_LITE_INCLUDE}"
       "${YAMLCPP_INCLUDE_DIR}"
       "${CMAKE_CURRENT_BINARY_DIR}"
-      "${DRAIOS_DEPENDENCIES_DIR}/yaml-${DRAIOS_YAML_VERSION}/target/include")
+      "${DRAIOS_DEPENDENCIES_DIR}/yaml-${DRAIOS_YAML_VERSION}/target/include"
+      "${PROJECT_SOURCE_DIR}/userspace/libhawk")
 
   target_link_libraries(
     falco
@@ -126,7 +132,8 @@ else()
       "${GRPCPP_INCLUDE}"
       "${PROTOBUF_INCLUDE}"
       "${CMAKE_CURRENT_BINARY_DIR}"
-      "${DRAIOS_DEPENDENCIES_DIR}/yaml-${DRAIOS_YAML_VERSION}/target/include")
+      "${DRAIOS_DEPENDENCIES_DIR}/yaml-${DRAIOS_YAML_VERSION}/target/include"
+      "${PROJECT_SOURCE_DIR}/userspace/libhawk")
 
   target_link_libraries(
     falco
